@@ -11,6 +11,9 @@ const Stack = createNativeStackNavigator();
 
 
 export default function App() {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+
   // Const to keep a local state of asyncstorage
   const [isOnBoardingCompleted, setIsOnboardingCompleted] = useState(null)
 
@@ -22,7 +25,7 @@ export default function App() {
       if (value !== null) {
         setIsOnboardingCompleted(value);
       } else {
-        setIsOnboardingCompleted('Not completed');
+        setIsOnboardingCompleted(false);
       }
     } catch (e) {
       console.log("Couldnt load onboarding value.");
@@ -38,10 +41,18 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {isOnBoardingCompleted ? (
-          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Profile">
+            {() => (
+              <Profile firstName={name} setName={setName} email={email} setEmail={setEmail}></Profile>
+            )}
+          </Stack.Screen>
         ) :
           (
-            <Stack.Screen name="OnBoarding" component={OnBoarding} />
+            <Stack.Screen name="OnBoarding">
+              {()=>(
+                <OnBoarding firstName={name} setName={setName} email={email} setEmail={setEmail}></OnBoarding>
+              )}
+            </Stack.Screen>
           )}
       </Stack.Navigator>
     </NavigationContainer>

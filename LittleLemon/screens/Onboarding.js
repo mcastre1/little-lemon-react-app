@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
 import { StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Dimensions } from 'react-native';
 
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
+function OnBoarding({firstName, setName, email, setEmail}) {
 
-function OnBoarding() {
+    const storeData = async () => {
+        try {
+            const items = [
+                ['@onboarding', true],
+                ['@name', firstName],
+                ['@email', email]
+            ]
+            await AsyncStorage.multiSet(items);
+        } catch (e) {
+            Alert.alert('Error', 'Failed to save Data');
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
@@ -19,9 +29,9 @@ function OnBoarding() {
             <View style={styles.content}>
                 <Text style={{ marginBottom: 100 }}>Let us get to know you</Text>
                 <Text>First Name</Text>
-                <TextInput style={styles.input}></TextInput>
+                <TextInput style={styles.input} onChange={setName} value={firstName}></TextInput>
                 <Text>Email</Text>
-                <TextInput style={styles.input}></TextInput>
+                <TextInput style={styles.input} onChange={setEmail} value={email}></TextInput>
             </View>
 
             {/* Footer */}
@@ -36,13 +46,7 @@ function OnBoarding() {
     );
 }
 
-const storeData = async () => {
-    try{
-        await AsyncStorage.setItem('@onboarding', 'complete');
-    }catch (e){
-        Alert.alert('Error', 'Failed to save Data');
-    }
-}; 
+
 
 const styles = StyleSheet.create({
     container: {
@@ -81,12 +85,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-      },
-      buttonText: {
+    },
+    buttonText: {
         color: '#fff',
         fontSize: 16,
-      },
-      input: {
+    },
+    input: {
         height: 50,
         borderColor: '#999',
         borderWidth: 1,
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16,
         backgroundColor: '#fff',
-      },
+    },
 });
 
 export default OnBoarding;
