@@ -3,23 +3,22 @@ import { View, Text, SafeAreaView, TouchableOpacity, TextInput } from 'react-nat
 import { StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function OnBoarding({firstName, setName, email, setEmail}) {
+function OnBoarding({firstName, setName, email, setEmail, navigation, setIsOnboardingCompleted} ) {
 
     const storeData = async () => {
         try {
             const items = [
-                ['@onboarding', true],
+                ['@onboarding', 'true'],
                 ['@name', firstName],
                 ['@email', email]
             ]
 
-            console.log(items)
             await AsyncStorage.multiSet(items);
+            setIsOnboardingCompleted('true')
+
         } catch (e) {
             Alert.alert('Error', 'Failed to save Data');
         }
-
-        console.log(await AsyncStorage.multiGet(['@onboarding','@name','@email']))
     };
 
     return (

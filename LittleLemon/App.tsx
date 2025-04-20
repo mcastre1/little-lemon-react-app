@@ -25,10 +25,8 @@ export default function App() {
       if (value !== null) {
         setIsOnboardingCompleted(value);
         setName(await AsyncStorage.getItem('@name'))
-        setName(await AsyncStorage.getItem('@email'))
+        setEmail(await AsyncStorage.getItem('@email'))
 
-      } else {
-        setIsOnboardingCompleted(false);
       }
     } catch (e) {
       console.log("Couldnt load onboarding value.");
@@ -45,15 +43,15 @@ export default function App() {
       <Stack.Navigator>
         {isOnBoardingCompleted ? (
           <Stack.Screen name="Profile">
-            {() => (
-              <Profile firstName={name} setName={setName} email={email} setEmail={setEmail}></Profile>
+            {(props) => (
+              <Profile {...props} firstName={name} setName={setName} email={email} setEmail={setEmail}></Profile>
             )}
           </Stack.Screen>
         ) :
           (
             <Stack.Screen name="OnBoarding">
-              {()=>(
-                <OnBoarding firstName={name} setName={setName} email={email} setEmail={setEmail}></OnBoarding>
+              {(props)=>(
+                <OnBoarding {...props} firstName={name} setName={setName} email={email} setEmail={setEmail} setIsOnboardingCompleted={setIsOnboardingCompleted}></OnBoarding>
               )}
             </Stack.Screen>
           )}
