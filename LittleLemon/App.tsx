@@ -24,6 +24,9 @@ export default function App() {
 
       if (value !== null) {
         setIsOnboardingCompleted(value);
+        setName(await AsyncStorage.getItem('@name'))
+        setName(await AsyncStorage.getItem('@email'))
+
       } else {
         setIsOnboardingCompleted(false);
       }

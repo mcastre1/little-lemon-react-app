@@ -12,10 +12,14 @@ function OnBoarding({firstName, setName, email, setEmail}) {
                 ['@name', firstName],
                 ['@email', email]
             ]
+
+            console.log(items)
             await AsyncStorage.multiSet(items);
         } catch (e) {
             Alert.alert('Error', 'Failed to save Data');
         }
+
+        console.log(await AsyncStorage.multiGet(['@onboarding','@name','@email']))
     };
 
     return (
@@ -29,9 +33,9 @@ function OnBoarding({firstName, setName, email, setEmail}) {
             <View style={styles.content}>
                 <Text style={{ marginBottom: 100 }}>Let us get to know you</Text>
                 <Text>First Name</Text>
-                <TextInput style={styles.input} onChange={setName} value={firstName}></TextInput>
+                <TextInput style={styles.input} onChangeText={setName} value={firstName}></TextInput>
                 <Text>Email</Text>
-                <TextInput style={styles.input} onChange={setEmail} value={email}></TextInput>
+                <TextInput style={styles.input} onChangeText={setEmail} value={email}></TextInput>
             </View>
 
             {/* Footer */}
