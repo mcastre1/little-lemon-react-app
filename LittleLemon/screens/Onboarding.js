@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
 import { StyleSheet } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dimensions } from 'react-native';
 
 const screenHeight = Dimensions.get('window').height;
@@ -26,7 +26,7 @@ function OnBoarding() {
 
             {/* Footer */}
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.footerButton}>
+                <TouchableOpacity style={styles.footerButton} onPress={storeData}>
                     <Text style={styles.buttonText}>Next</Text>
                 </TouchableOpacity>
 
@@ -35,6 +35,14 @@ function OnBoarding() {
 
     );
 }
+
+const storeData = async () => {
+    try{
+        await AsyncStorage.setItem('@onboarding', 'complete');
+    }catch (e){
+        Alert.alert('Error', 'Failed to save Data');
+    }
+}; 
 
 const styles = StyleSheet.create({
     container: {
