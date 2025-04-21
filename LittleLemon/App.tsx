@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
-
 export default function App() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
