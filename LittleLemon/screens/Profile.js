@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { View, Text, Button, TextInput, CheckBox, StyleSheet } from "react-native";
 
-function Profile({ firstName, setName, email, setEmail }) {
+function Profile({ firstName, setName, email, setEmail, setOnBoarding }) {
     const callValues = async () => {
         console.log(await AsyncStorage.multiGet(['@onboarding', '@name', '@email']))
     }
@@ -17,11 +17,11 @@ function Profile({ firstName, setName, email, setEmail }) {
             </View>
 
             <Text style={styles.label}>First name</Text>
-            <TextInput style={styles.input}></TextInput>
+            <TextInput style={styles.input} value={firstName}></TextInput>
             <Text style={styles.label}>Last name</Text>
             <TextInput style={styles.input}></TextInput>
             <Text style={styles.label}>Email</Text>
-            <TextInput style={styles.input}></TextInput>
+            <TextInput style={styles.input} value={email}></TextInput>
             <Text style={styles.label}>Phone number</Text>
             <TextInput style={styles.input}></TextInput>
             <Text style={styles.heading}>Email notifications</Text>
@@ -42,17 +42,19 @@ function Profile({ firstName, setName, email, setEmail }) {
                 <Text style={styles.checkboxLabel}>Newsletter</Text>
             </View>
 
-            <Button style={styles.logoutButton}
-                title="Log out"
-                onPress={async () => {
-                    await AsyncStorage.clear();
-                    console.log('Cleared asyncstorage.')
-                }}
-            />
+            <View style={styles.logoutButtonContainer}>
+                <Button
+                    title="Log out"
+                    onPress={async () => {
+                        await AsyncStorage.clear();
+                        setOnBoarding(null);
+                    }}
+                />
+            </View>
 
-            <View style={styles.bottomButtons}>
-                <Button title="Discard changes"></Button>
-                <Button title="Save changes"></Button>
+            <View style={styles.bottomButtonsContainer}>
+                <Button title="Discard changes" style={styles.bottomButtons}></Button>
+                <Button title="Save changes" style={styles.bottomButtons}></Button>
             </View>
         </View>
     );
@@ -88,11 +90,16 @@ const styles = StyleSheet.create({
         gap: 30,
         marginLeft: 10,
     },
-    bottomButtons:{
-        flexDirection:'row',
+    bottomButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap:25
     },
-    logoutButton:{
-        padding:200
+    logoutButtonContainer: {
+        margin:10
+    },
+    bottomButtons:{
+        borderRadius:20
     }
 });
 

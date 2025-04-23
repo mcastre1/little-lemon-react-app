@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnBoarding from './screens/Onboarding';
 import Profile from './screens/Profile';
+import Home from './screens/Home';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -41,15 +42,18 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {isOnBoardingCompleted ? (
-          <Stack.Screen name="Profile">
-            {(props) => (
-              <Profile {...props} firstName={name} setName={setName} email={email} setEmail={setEmail}></Profile>
-            )}
-          </Stack.Screen>
+          <>
+            <Stack.Screen name='Home' component={Home}></Stack.Screen>
+            <Stack.Screen name="Profile">
+              {(props) => (
+                <Profile {...props} firstName={name} setName={setName} email={email} setEmail={setEmail} setOnBoarding={setIsOnboardingCompleted}></Profile>
+              )}
+            </Stack.Screen>
+          </>
         ) :
           (
             <Stack.Screen name="OnBoarding">
-              {(props)=>(
+              {(props) => (
                 <OnBoarding {...props} firstName={name} setName={setName} email={email} setEmail={setEmail} setIsOnboardingCompleted={setIsOnboardingCompleted}></OnBoarding>
               )}
             </Stack.Screen>
