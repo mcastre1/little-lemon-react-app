@@ -43,7 +43,7 @@ export default function App() {
       <Stack.Navigator>
         {isOnBoardingCompleted ? (
           <>
-            <Stack.Screen name='Home' component={Home}></Stack.Screen>
+            <Stack.Screen name='Home' component={Home} options={{headerShown: false}}></Stack.Screen>
             <Stack.Screen name="Profile">
               {(props) => (
                 <Profile {...props} firstName={name} setName={setName} email={email} setEmail={setEmail} setOnBoarding={setIsOnboardingCompleted}></Profile>
