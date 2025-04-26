@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, Button, FlatList } from 'react-native'
+import React, { useState, useEffect } from "react";
+import { View, Text, Button, FlatList, TouchableOpacity, TextInput } from 'react-native'
 import { StyleSheet } from "react-native";
 
 function Home() {
     const [data, setData] = useState([]);
+    const [menuData, setMenuData] = useState([]);
 
     const Item = ({ name, price, description, image }) => (
         <View>
@@ -19,11 +20,27 @@ function Home() {
                 .then((response) => response.json())
                 .then((data) => {
                     setData(data['menu']);
+                    setMenuData(data['menu']);
+                    console.log(data['menu']);
                 })
         } catch (error) {
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        getDataFromAPIAsync()
+    }, []);
+
+    const filterMenuDataByCategory = (category) => {
+        
+        setMenuData(data.filter((item,index,data)=>{
+            if(item['category'] == category){
+                return true;
+            }
+            return false;
+        }));
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -41,19 +58,50 @@ function Home() {
                         <Text>image</Text>
                     </View>
                 </View>
+                <View>
+                    <TextInput onChangeText={(text)=>{
+                        setMenuData(data.filter((item,index,data) => {
+                            if(text == item['name'].substring(0,text.length).toLowerCase()){
+                                return true
+                            }
+                            return false
+                        }))
+                    }} style={{backgroundColor:'#F2F2F2',
+                    margin:20, height:40}}/>
+                </View>
             </View>
+            <View style={{ flex: 1 }}>
+                <Text style={{fontWeight:'bold', margin:5, fontSize:20}}>ORDER FOR DELIVERY!</Text>
+                <View style={styles.categoryContainer}>
+                    <TouchableOpacity style={styles.categoryButton} onPress={() => filterMenuDataByCategory('starters')}>
+                        <Text>Starters</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.categoryButton}  onPress={() => filterMenuDataByCategory('mains')}>
+                        <Text>Mains</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.categoryButton}  onPress={() => filterMenuDataByCategory('desserts')}>
+                        <Text>Desserts</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.categoryButton}  onPress={() => filterMenuDataByCategory('drinks')}>
+                        <Text>Drinks</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.categoryButton}  onPress={() => filterMenuDataByCategory('specials')}>
+                        <Text>Specials</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={{ height: 1, backgroundColor: '#ccc', marginTop: 20 }} />
             <View style={styles.list}>
                 <FlatList
-                    data={data}
-                    renderItem={({ item }) => <Item name={item.name} description={item.description} price={item.price}/>}
+                    data={menuData}
+                    renderItem={({ item }) => <Item name={item.name} description={item.description} price={item.price} />}
                     keyExtractor={(item, index) => index.toString()}
                     ItemSeparatorComponent={() => (
-                        <View style={{ height: 1, backgroundColor: '#ccc', marginTop:10}} />
-                      )}
-                    
+                        <View style={{ height: 1, backgroundColor: '#ccc', marginTop: 10 }} />
+                    )}
+
                 />
             </View>
-            <Button title="api data to console" onPress={getDataFromAPIAsync}></Button>
         </View>
     );
 }
@@ -74,24 +122,37 @@ const styles = StyleSheet.create({
         backgroundColor: '#495E57',
         padding: 20
     },
+    categoryContainer: {
+        flex: 1,
+        flexDirection: 'row'
+    },
     list: {
         flex: 7
     },
-    itemName:{
-        fontSize:20,
-        fontWeight:'bold',
-        marginTop:5,
-        marginLeft:5
+    itemName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 5,
+        marginLeft: 5
     },
     itemDescription: {
-        fontSize:15,
-        color:'#495E57',
-        margin:7,
+        fontSize: 15,
+        color: '#495E57',
+        margin: 7,
     },
-    itemPrice:{
-        fontSize:15,
-        color:'#495E57',
-        marginLeft:5,
+    itemPrice: {
+        fontSize: 15,
+        color: '#495E57',
+        marginLeft: 5,
+    },
+    categoryButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#DDDDDD',
+        padding:15,
+        borderRadius:10,
+        marginBottom:10,
+        marginLeft:5
     }
 
 });
