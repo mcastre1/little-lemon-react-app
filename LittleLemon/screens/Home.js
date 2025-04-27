@@ -21,7 +21,6 @@ function Home() {
                 .then((data) => {
                     setData(data['menu']);
                     setMenuData(data['menu']);
-                    console.log(data['menu']);
                 })
         } catch (error) {
             console.error(error);
@@ -30,10 +29,10 @@ function Home() {
 
     useEffect(() => {
         getDataFromAPIAsync()
+        filterMenuDataByCategory('all')
     }, []);
 
     const filterMenuDataByCategory = (category) => {
-        
         setMenuData(data.filter((item,index,data)=>{
             if(item['category'] == category){
                 return true;
@@ -60,12 +59,16 @@ function Home() {
                 </View>
                 <View>
                     <TextInput onChangeText={(text)=>{
-                        setMenuData(data.filter((item,index,data) => {
+                        setMenuData(menuData.filter((item,index,data) => {
                             if(text == item['name'].substring(0,text.length).toLowerCase()){
                                 return true
                             }
                             return false
-                        }))
+                        }
+                        ))
+                        if(text==''){
+                            setMenuData(data)
+                        }
                     }} style={{backgroundColor:'#F2F2F2',
                     margin:20, height:40}}/>
                 </View>
